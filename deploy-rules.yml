@@ -1,0 +1,27 @@
+name: Deploy Detection Rules
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'rules/**'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install detection-rules
+        run: pip install detection-rules
+
+      - name: Upload rules to Kibana
+        env:
+          KIBANA_URL: ${{ secrets.KIBANA_URL }}
+          KIBANA_API_KEY: ${{ secrets.KIBANA_API_KEY }}
+        run: |
+          python -m detection_rules kibana upload-rule rules/*.toml
