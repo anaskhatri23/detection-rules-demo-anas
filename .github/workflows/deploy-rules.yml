@@ -36,4 +36,6 @@ jobs:
           KIBANA_API_KEY: ${{ secrets.KIBANA_API_KEY }}
         run: |
           cd detection-rules
-          python -m detection_rules kibana --kibana-url "$KIBANA_URL" --api-key "$KIBANA_API_KEY" upload-rule ../my-rules/rules/*.toml
+          for rule in ../my-rules/rules/*.toml; do
+            python -m detection_rules kibana --kibana-url "$KIBANA_URL" --api-key "$KIBANA_API_KEY" upload-rule -f "$rule"
+          done
