@@ -6,7 +6,7 @@ updated_date = "2026/06/16"
 
 [rule]
 author = ["Your Team"]
-description = "Test rule to verify Detection as Code pipeline."
+description = "Test rule to verify Detection as Code pipeline. Ha"
 from = "now-9m"
 index = ["logs-endpoint.events.process-*"]
 language = "eql"
