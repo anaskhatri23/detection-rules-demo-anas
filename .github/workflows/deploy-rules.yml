@@ -10,18 +10,30 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout your repo
+        uses: actions/checkout@v4
+        with:
+          path: my-rules
+
+      - name: Checkout detection-rules
+        uses: actions/checkout@v4
+        with:
+          repository: elastic/detection-rules
+          path: detection-rules
 
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
 
       - name: Install detection-rules
-        run: pip install detection-rules
+        run: |
+          cd detection-rules
+          pip install -e ".[dev]"
 
       - name: Upload rules to Kibana
         env:
           KIBANA_URL: ${{ secrets.KIBANA_URL }}
           KIBANA_API_KEY: ${{ secrets.KIBANA_API_KEY }}
         run: |
-          python -m detection_rules kibana upload-rule rules/*.toml
+          cd detection-rules
+          python -m detection_rules kibana upload-rule ../my-rules/rules/*.toml
